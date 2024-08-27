@@ -1,4 +1,6 @@
 import { FC, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { HeaderLayout } from "./layouts";
 
 export const App: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -10,11 +12,8 @@ export const App: FC = () => {
   if (isLoading) return "loading";
   return (
     <>
-      <h1>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae itaque ea,
-        facilis saepe rem culpa harum labore fugiat dignissimos est odit soluta
-        pariatur modi necessitatibus et blanditiis nisi quaerat eligendi!
-      </h1>
+      <HeaderLayout />
+      <Outlet />
     </>
   );
 };
