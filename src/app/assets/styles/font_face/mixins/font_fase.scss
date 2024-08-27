@@ -1,0 +1,15 @@
+@mixin font_fase-mixin(
+  $font_name,
+  $font_style,
+  $font_weight,
+  $font_url,
+  $font_format
+) {
+  @font-face {
+    font-family: $font_name;
+    font-style: $font_style;
+    font-weight: $font_weight;
+    font-display: swap;
+    src: url($font_url) format($font_format);
+  }
+}

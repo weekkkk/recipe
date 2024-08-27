@@ -1,0 +1,5 @@
+@import "../../font_weight";
+
+@function get-font_url($font_name, $font_weight, $font_style) {
+  @return "./fonts/#{$font_name}/ttf/#{$font_name}-#{get-font_weight-name($font_weight)}#{$font_style}.ttf";
+}

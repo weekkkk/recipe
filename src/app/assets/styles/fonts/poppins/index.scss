@@ -1,0 +1,31 @@
+@use "sass:map";
+@import "../functions";
+@import "../../font_face";
+
+$font_name: "Poppins";
+
+@mixin font_face-poppins-italic-mixin($font_weight) {
+  $font_url: get-font_url($font_name, $font_weight, "Italic");
+  @include font_fase-italic-mixin(
+    "Poppins",
+    $font_weight,
+    $font_url,
+    "truetype"
+  );
+}
+
+@mixin font_face-poppins-normal-mixin($font_weight) {
+  $font_url: get-font_url($font_name, $font_weight, "");
+  @include font_fase-normal-mixin(
+    "Poppins",
+    $font_weight,
+    $font_url,
+    "truetype"
+  );
+}
+
+@for $i from 1 to 9 {
+  $font_weight: $i * 100;
+  @include font_face-poppins-italic-mixin($font_weight);
+  @include font_face-poppins-normal-mixin($font_weight);
+}

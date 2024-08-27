@@ -1,0 +1,5 @@
+@import "../vars";
+
+@function get-font_weight-name($font_weight) {
+  @return map.get($font_weights, $font_weight);
+}
