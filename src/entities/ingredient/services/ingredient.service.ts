@@ -1,7 +1,15 @@
-import { $ingredient, GetIngredientListResDto } from "../api";
+import {
+  $ingredient,
+  GetIngredientListReqDto,
+  GetIngredientListResDto,
+} from "../api";
 
-export class IngredientService {
-  getIngredientList(dto: GetIngredientListResDto) {
-    return $ingredient.get("/search", { params: dto });
+class IngredientService {
+  getIngredientList(dto: GetIngredientListReqDto) {
+    return $ingredient.get<GetIngredientListResDto>("/search_", {
+      params: dto,
+    });
   }
 }
+
+export const ingredientService = new IngredientService();
