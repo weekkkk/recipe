@@ -15,9 +15,9 @@ export const LogoIcon: FC = () => (
     <path
       d="M126 16H142M126 24H142M126 32H134M117 24C117 11 121 7 134 7C147 7 151 11 151 24C151 37 147 41 134 41C121 41 117 37 117 24Z"
       stroke="currentColor"
-      stroke-width="3"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );

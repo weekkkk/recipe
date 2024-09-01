@@ -8,4 +8,9 @@
   html {
     font-family: "Poppins";
   }
+
+  .resize-box {
+    resize: both;
+    overflow: hidden;
+  }
 }

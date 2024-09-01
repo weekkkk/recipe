@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import { HeaderLayout } from "./layouts";
+import { router } from "./router";
 
 export const App: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -13,7 +14,7 @@ export const App: FC = () => {
   return (
     <>
       <HeaderLayout />
-      <Outlet />
+      <RouterProvider router={router} />
     </>
   );
 };

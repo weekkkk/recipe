@@ -1,16 +1,21 @@
-// import { useAppDispatch, useAppSelector } from "@/app/hooks";
-// import { fetchPopulatIngredientList } from "@/entities/ingredient";
-import { ingredientService } from "@/entities/ingredient/services";
-import { FC, useEffect } from "react";
+import { ResizeBox } from "@/shared/components";
+import { FC, useRef } from "react";
 
 export const IngredientListPage: FC = () => {
-  // const { listOfPopular } = useAppSelector((state) => state.ingredient);
-  // const dispatch = useAppDispatch();
+  const el = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    // dispatch(fetchPopulatIngredientList());
-    ingredientService.getListOfPopular();
-  }, []);
-
-  return <div className="bg-slate-50">{}</div>;
+  return (
+    <ResizeBox
+      pointElements={{
+        top: <button>top</button>,
+        right: <button className="bg-green-500">right</button>,
+        bottom: <button>bottom</button>,
+        left: <button>left</button>,
+      }}
+    >
+      <div ref={el} className="bg-green-400 h-40 w-44 left-3 top-3">
+        <h1>test</h1>
+      </div>
+    </ResizeBox>
+  );
 };
