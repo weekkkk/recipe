@@ -29,6 +29,7 @@ export const ResizeBox: FC<IResizeBoxProps> = memo(
         const newSize = { ...startSize };
         if (side == SideEnum.Right || side == SideEnum.Bottom) delta = -delta;
         newSize[sizePropName] += delta;
+        if (newSize[sizePropName] < 0) newSize[sizePropName] = 0;
         setSize(newSize);
       },
       []

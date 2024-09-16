@@ -56,6 +56,7 @@ export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
   const handleDrag = useCallback(
     (e: DragServiceEvent) => {
       const delta = e.deltaPosition[orientation];
+      console.log(delta);
       onDrag?.(delta, side, sizePropName);
     },
     [onDrag, orientation, side, sizePropName]
