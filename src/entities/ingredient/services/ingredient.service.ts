@@ -16,7 +16,9 @@ class IngredientService {
     let text = localStorage.getItem("fullListOfPopular");
 
     if (!text) {
-      text = await readFileByUrl("popurlar-ingredient-list.csv");
+      const fileText = await readFileByUrl("popurlar-ingredient-list.csv");
+      if (!fileText) throw new Error("Текст из файла не прочитан");
+      text = fileText;
       localStorage.setItem("fullListOfPopular", text);
     }
 

@@ -1,8 +1,7 @@
-import { SideEnum } from "@/shared/enums";
 import { ISize } from "@/shared/interfaces";
-import { SizePropNameType } from "@/shared/types";
+import { SideType, SizePropNameType } from "@/shared/types";
 
 export interface IResizeBoxPointHandler {
-  (delta: number, side: SideEnum, sizePropName: SizePropNameType): void;
+  (delta: number, side: SideType, sizePropName: SizePropNameType): void;
   startSize?: ISize;
 }

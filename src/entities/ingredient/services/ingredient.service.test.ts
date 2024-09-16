@@ -116,7 +116,9 @@ almond milk;93607
 almonds;12061`;
 
     const mockReadFileByUrl = jest.spyOn(sharedFunctions, "readFileByUrl");
-    mockReadFileByUrl.mockReturnValue(Promise.resolve(readFileByUrlRes));
+    beforeEach(() => {
+      mockReadFileByUrl.mockReturnValue(Promise.resolve(readFileByUrlRes));
+    });
 
     afterEach(() => {
       jest.clearAllMocks();

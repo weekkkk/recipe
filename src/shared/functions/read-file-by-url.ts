@@ -8,16 +8,19 @@ export const readFileByUrl = async (fileUrl: string) => {
     const res = await axios.get<File>(fileUrl, { responseType: "blob" });
     const file = res.data;
     const reader = new FileReader();
-    const fileText = await new Promise<string>((resolve, reject) => {
-      reader.onload = () => {
-        resolve(reader.result as string);
-      };
-      reader.onerror = () => {
-        reject();
-      };
-      reader.readAsText(file);
-    });
+    const fileText = await new Promise<string | ArrayBuffer | null>(
+      (resolve, reject) => {
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        reader.onerror = () => {
+          reject();
+        };
+        reader.readAsText(file);
+      }
+    );
     reader.abort();
+    if (typeof fileText != "string") return;
     return fileText;
   } catch {
     throw err;

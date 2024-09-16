@@ -3,8 +3,10 @@
     "esModuleInterop": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "jsx": "react-jsx"
   },
+  "include": ["./jest-setup.ts"],
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

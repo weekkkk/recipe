@@ -1,9 +1,9 @@
-import { SideEnum } from "@/shared/enums";
 import { IResizeBoxPointHandler } from "./resize-box-point-handler.interface";
+import { SideType } from "@/shared/types";
 
 export interface IResizeBoxPointProps {
   children: JSX.Element;
-  side: SideEnum;
+  side: SideType;
   onGrab?: IResizeBoxPointHandler;
   onDrag?: IResizeBoxPointHandler;
   onDrop?: IResizeBoxPointHandler;

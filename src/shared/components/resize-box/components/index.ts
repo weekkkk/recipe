@@ -1,1 +1,1 @@
-export { ResizeBoxPoint, type HandelFunction } from "./point";
+export { ResizeBoxPoint, type IResizeBoxPointHandler } from "./point";

@@ -1,12 +1,11 @@
-import { FC, useEffect, useMemo, useRef } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef } from "react";
 import type { IResizeBoxPointProps } from "./interfaces";
 import {
   resizeBoxPointSideClasses as sideClasses,
   resizeBoxPointTranslateClasses as translateClasses,
 } from "./classes";
 import { DragService, DragServiceEvent } from "@/shared/services";
-import { SizePropNameType } from "@/shared/types";
-import { SideEnum } from "@/shared/enums";
+import { SideType, SizePropNameType } from "@/shared/types";
 
 export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
   children,
@@ -34,11 +33,11 @@ export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
     },
   };
 
-  const xSides = [SideEnum.Left, SideEnum.Right];
+  const xSides: SideType[] = useMemo(() => ["left", "right"], []);
 
   const orientation = useMemo(
     () => (xSides.includes(side) ? "x" : "y"),
-    [side]
+    [xSides, side]
   );
 
   const sizePropName = useMemo<SizePropNameType>(
@@ -46,20 +45,29 @@ export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
     [orientation]
   );
 
-  const handleStart = (e: DragServiceEvent) => {
-    const delta = e.deltaPosition[orientation];
-    onGrab?.(delta, side, sizePropName);
-  };
+  const handleStart = useCallback(
+    (e: DragServiceEvent) => {
+      const delta = e.deltaPosition[orientation];
+      onGrab?.(delta, side, sizePropName);
+    },
+    [onGrab, orientation, side, sizePropName]
+  );
 
-  const handleDrag = (e: DragServiceEvent) => {
-    const delta = e.deltaPosition[orientation];
-    onDrag?.(delta, side, sizePropName);
-  };
+  const handleDrag = useCallback(
+    (e: DragServiceEvent) => {
+      const delta = e.deltaPosition[orientation];
+      onDrag?.(delta, side, sizePropName);
+    },
+    [onDrag, orientation, side, sizePropName]
+  );
 
-  const handleStop = (e: DragServiceEvent) => {
-    const delta = e.deltaPosition[orientation];
-    onDrop?.(delta, side, sizePropName);
-  };
+  const handleStop = useCallback(
+    (e: DragServiceEvent) => {
+      const delta = e.deltaPosition[orientation];
+      onDrop?.(delta, side, sizePropName);
+    },
+    [onDrop, orientation, side, sizePropName]
+  );
 
   useEffect(() => {
     if (!$localChildrenChild.current) return;
@@ -74,7 +82,7 @@ export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
     return () => {
       dragAndDropService.destroy();
     };
-  }, []);
+  }, [handleStart, handleDrag, handleStop]);
 
   return localChildren;
 };
