@@ -2,8 +2,6 @@ import { jest, describe, it, expect } from "@jest/globals";
 import { readFileByUrl } from "./read-file-by-url";
 import axios, { AxiosResponse } from "axios";
 
-jest.mock("fs");
-
 describe("readFileByUrl", () => {
   const fileUrl = "test-file.txt";
   const fileText = "test file text";
