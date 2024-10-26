@@ -1,3 +1,3 @@
 import { ISize } from "../interfaces";
 
-export type SizePropNameType = keyof ISize;
+export type TSizePropName = keyof ISize;

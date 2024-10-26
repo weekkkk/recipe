@@ -1,4 +1,4 @@
-export enum SideEnum {
+export enum ESide {
   Top = "top",
   Right = "right",
   Bottom = "bottom",

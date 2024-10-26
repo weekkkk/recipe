@@ -1,7 +1,6 @@
 import { ISize } from "@/shared/interfaces";
-import { SideType, SizePropNameType } from "@/shared/types";
+import { TSide, TSizePropName } from "@/shared/types";
 
-export interface IResizeBoxPointHandler {
-  (delta: number, side: SideType, sizePropName: SizePropNameType): void;
-  startSize?: ISize;
+export interface IResizeBoxPointHandler extends Partial<ISize> {
+  (delta: number, side: TSide, sizePropName: TSizePropName): void;
 }

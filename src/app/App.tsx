@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { RouterProvider } from "react-router-dom";
-import { HeaderLayout } from "./layouts";
 import { router } from "./router";
+import { Layout } from "./layouts/default/default.layout";
 
 export const App: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -13,8 +13,9 @@ export const App: FC = () => {
   if (isLoading) return "loading";
   return (
     <>
-      <HeaderLayout />
-      <RouterProvider router={router} />
+      <Layout>
+        <RouterProvider router={router} />
+      </Layout>
     </>
   );
 };

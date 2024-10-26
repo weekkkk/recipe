@@ -1,17 +1,17 @@
-import { EventStageEnum } from "../../enums";
+import { EEventStage } from "../../enums";
 import { IPosition } from "../../interfaces";
-import { EventStageListenerDictionaryType } from "../../types";
+import { TEventStageListenerDictionary } from "../../types";
 import { DragServiceEvent } from "./models";
 
 export class DragService<T extends HTMLElement = HTMLElement> {
   private element: T;
   private position?: IPosition;
   private startPosition?: IPosition;
-  private listeners: EventStageListenerDictionaryType<DragServiceEvent>;
+  private listeners: TEventStageListenerDictionary<DragServiceEvent>;
 
   constructor(
     element: T,
-    listeners: EventStageListenerDictionaryType<DragServiceEvent>
+    listeners: TEventStageListenerDictionary<DragServiceEvent>
   ) {
     this.element = element;
     this.listeners = listeners;
@@ -53,7 +53,7 @@ export class DragService<T extends HTMLElement = HTMLElement> {
     this.element.setPointerCapture(event.pointerId);
     this.element.onpointermove = this.onPointermove;
     this.element.onpointerup = this.onPointerup;
-    this.generateEvent(EventStageEnum.Start);
+    this.generateEvent(EEventStage.Start);
   };
 
   private onPointermove = (event: PointerEvent) => {
@@ -62,7 +62,7 @@ export class DragService<T extends HTMLElement = HTMLElement> {
       x,
       y,
     };
-    this.generateEvent(EventStageEnum.Process);
+    this.generateEvent(EEventStage.Process);
   };
 
   private onPointerup = (event: PointerEvent) => {
@@ -71,7 +71,7 @@ export class DragService<T extends HTMLElement = HTMLElement> {
       x,
       y,
     };
-    this.generateEvent(EventStageEnum.Stop);
+    this.generateEvent(EEventStage.Stop);
     this.startPosition = undefined;
     this.element.onpointermove = null;
     this.element.onpointerup = null;
@@ -87,7 +87,7 @@ export class DragService<T extends HTMLElement = HTMLElement> {
     };
   }
 
-  private generateEvent(stage: EventStageEnum) {
+  private generateEvent(stage: EEventStage) {
     if (!this.startPosition || !this.position || !this.deltaPosition) return;
     const event = new DragServiceEvent(
       stage,

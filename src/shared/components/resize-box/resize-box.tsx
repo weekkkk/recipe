@@ -2,7 +2,7 @@ import {
   FC,
   memo,
   useCallback,
-  useLayoutEffect,
+  // useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -10,47 +10,61 @@ import {
 import type { IResizeBoxProps } from "./interfaces";
 import { ResizeBoxPoint, IResizeBoxPointHandler } from "./components";
 import { ISize } from "@/shared/interfaces";
-import { SideEnum } from "@/shared/enums";
-import { SideType } from "@/shared/types";
-import { optimizeSetState } from "@/shared/functions";
+import { ESide } from "@/shared/enums";
+import { TSide } from "@/shared/types";
+// import { optimizeSetState } from "@/shared/functions";
 
 export const ResizeBox: FC<IResizeBoxProps> = memo(
-  ({ children, pointElements }) => {
+  ({ children, pointElements, position = "relative" }) => {
     const $localChildrenChild = useRef<HTMLDivElement>(null);
 
-    const [size, setSize] = useState<ISize>();
+    const [height, setHeight] = useState<ISize["height"]>();
+    const [width, setWidth] = useState<ISize["width"]>();
+    const size: Partial<ISize> = useMemo(() => {
+      const size: Partial<ISize> = {};
+      if (height) size.height = height;
+      if (width) size.width = width;
+      // console.log(size);
+      return size;
+    }, [height, width]);
 
-    const optimizedSetSize = useMemo(() => optimizeSetState(setSize), []);
+    // const optimizedSetSize = useMemo(() => optimizeSetState(setSize), []);
 
     const handleDrag: IResizeBoxPointHandler = useCallback(
       (delta, side, sizePropName) => {
-        const startSize = handleDrag.startSize;
+        const startSize = handleDrag[sizePropName];
         if (!startSize) return;
-        const newSize = { ...startSize };
-        if (side == SideEnum.Right || side == SideEnum.Bottom) delta = -delta;
-        newSize[sizePropName] += delta;
-        if (newSize[sizePropName] < 0) newSize[sizePropName] = 0;
-        setSize(newSize);
+        if (side == ESide.Right || side == ESide.Bottom) delta = -delta;
+        let newSize = startSize + delta;
+        if (newSize < 0) newSize = 0;
+        if (sizePropName == "height") setHeight(newSize);
+        if (sizePropName == "width") setWidth(newSize);
       },
       []
     );
 
-    const handleGrab: IResizeBoxPointHandler = useCallback(() => {
-      if (!handleDrag.startSize) handleDrag.startSize = getStartSize();
-      setSize(handleDrag.startSize);
-    }, [handleDrag]);
+    const handleGrab: IResizeBoxPointHandler = useCallback(
+      (delta, side, sizePropName) => {
+        // console.log(sizePropName);
+        if (!handleDrag[sizePropName])
+          handleDrag[sizePropName] = getStartSize()?.[sizePropName];
+        if (sizePropName == "height") setHeight(handleDrag[sizePropName]);
+        else setWidth(handleDrag[sizePropName]);
+      },
+      [handleDrag]
+    );
 
     const handleDrop: IResizeBoxPointHandler = useCallback(
       (delta, side, sizePropName) => {
         handleDrag(delta, side, sizePropName);
-        handleDrag.startSize = undefined;
+        handleDrag[sizePropName] = undefined;
       },
       [handleDrag]
     );
 
     const points = useMemo(() => {
       const entries = Object.entries(pointElements) as [
-        SideType,
+        TSide,
         JSX.Element
       ][];
       return entries.map(([side, pointElement]) => {
@@ -69,12 +83,13 @@ export const ResizeBox: FC<IResizeBoxProps> = memo(
     }, [pointElements, handleDrag, handleGrab, handleDrop]);
 
     const localChildren: JSX.Element = useMemo(() => {
+      // console.log(points);
       return {
         ...children,
         props: {
           ...children.props,
           style: { ...children.props.style, ...size },
-          className: `${children.props.className} relative`,
+          className: `${children.props.className} ${position}`,
           children: (
             <>
               {children.props.children} {points}
@@ -83,11 +98,11 @@ export const ResizeBox: FC<IResizeBoxProps> = memo(
           ),
         },
       };
-    }, [size, children, points]);
+    }, [size, children, points, position]);
 
-    useLayoutEffect(() => {
-      optimizedSetSize(getStartSize());
-    }, [optimizedSetSize]);
+    // useLayoutEffect(() => {
+    //   optimizedSetSize(getStartSize());
+    // }, [optimizedSetSize]);
 
     const getStartSize = (): ISize | undefined => {
       if (!$localChildrenChild.current) return;

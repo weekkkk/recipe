@@ -1,3 +1,3 @@
-import { SideEnum } from "../enums";
+import { ESide } from "../enums";
 
-export type SideType = `${SideEnum}`;
+export type TSide = `${ESide}`;

@@ -1,4 +1,4 @@
-export interface ISize {
-  height: number;
-  width: number;
+export interface ISize<T = number> {
+  height: T;
+  width: T;
 }

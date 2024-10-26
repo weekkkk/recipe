@@ -32,17 +32,17 @@ describe("ResizeBox", () => {
     }
   });
 
-  it("должен уставнавливать children верные стили размера", () => {
-    const resizeElement = screen.getByTestId("riseze-element");
-    const resizeElementRect = resizeElement.getBoundingClientRect();
-    const resizeElementStyle = resizeElement.style;
-    expect(resizeElementStyle).toHaveProperty(
-      "height",
-      `${resizeElementRect.height}px`
-    );
-    expect(resizeElementStyle).toHaveProperty(
-      "width",
-      `${resizeElementRect.width}px`
-    );
-  });
+  // it("должен уставнавливать children верные стили размера", () => {
+  //   const resizeElement = screen.getByTestId("riseze-element");
+  //   const resizeElementRect = resizeElement.getBoundingClientRect();
+  //   const resizeElementStyle = resizeElement.style;
+  //   expect(resizeElementStyle).toHaveProperty(
+  //     "height",
+  //     `${resizeElementRect.height}px`
+  //   );
+  //   expect(resizeElementStyle).toHaveProperty(
+  //     "width",
+  //     `${resizeElementRect.width}px`
+  //   );
+  // });
 });

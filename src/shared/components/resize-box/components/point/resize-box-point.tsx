@@ -5,7 +5,7 @@ import {
   resizeBoxPointTranslateClasses as translateClasses,
 } from "./classes";
 import { DragService, DragServiceEvent } from "@/shared/services";
-import { SideType, SizePropNameType } from "@/shared/types";
+import { TSide, TSizePropName } from "@/shared/types";
 
 export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
   children,
@@ -16,9 +16,9 @@ export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
 }) => {
   const $localChildrenChild = useRef<HTMLDivElement>(null);
 
-  const className = `${children.props.className ?? ""} absolute ${
-    sideClasses[side]
-  } ${translateClasses[side]} touch-none`;
+  const className = `${children.props.className ?? ""} ${sideClasses[side]} ${
+    translateClasses[side]
+  } absolute touch-none`;
 
   const localChildren: JSX.Element = {
     ...children,
@@ -33,14 +33,14 @@ export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
     },
   };
 
-  const xSides: SideType[] = useMemo(() => ["left", "right"], []);
+  const xSides: TSide[] = useMemo(() => ["left", "right"], []);
 
   const orientation = useMemo(
     () => (xSides.includes(side) ? "x" : "y"),
     [xSides, side]
   );
 
-  const sizePropName = useMemo<SizePropNameType>(
+  const sizePropName = useMemo<TSizePropName>(
     () => (orientation == "x" ? "width" : "height"),
     [orientation]
   );
@@ -56,7 +56,6 @@ export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
   const handleDrag = useCallback(
     (e: DragServiceEvent) => {
       const delta = e.deltaPosition[orientation];
-      console.log(delta);
       onDrag?.(delta, side, sizePropName);
     },
     [onDrag, orientation, side, sizePropName]
@@ -71,8 +70,10 @@ export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
   );
 
   useEffect(() => {
+    // console.log($localChildrenChild.current);
     if (!$localChildrenChild.current) return;
     const parent = $localChildrenChild.current.parentElement;
+    // console.log('parent', { parent });
     if (!parent) return;
     const dragAndDropService = new DragService(parent, {
       start: handleStart,

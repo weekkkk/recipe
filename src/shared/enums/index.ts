@@ -1,2 +1,4 @@
-export { SideEnum } from "./side.enum";
-export { EventStageEnum } from "./event-stage.enum";
+export { ESide } from "./side.enum";
+export { EEventStage } from "./event-stage.enum";
+export { EPosition } from "./position.enum";
+export { EOrientation } from "./orientation.enum";

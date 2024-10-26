@@ -1,4 +1,4 @@
-import { EventStageEnum } from "@/shared/enums";
+import { EEventStage } from "@/shared/enums";
 import { IPosition } from "@/shared/interfaces";
 
 export class DragServiceEvent extends Event {
@@ -7,7 +7,7 @@ export class DragServiceEvent extends Event {
   readonly deltaPosition!: IPosition;
 
   constructor(
-    stage: EventStageEnum,
+    stage: EEventStage,
     startPosition: IPosition,
     position: IPosition,
     deltaPosition: IPosition,

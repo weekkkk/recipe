@@ -17,6 +17,7 @@
     "@types/react-redux": "^7.1.33",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.5",
+    "classnames": "^2.5.1",
     "file-mock": "^1.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "react": "^18.3.1",

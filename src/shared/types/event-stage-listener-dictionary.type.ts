@@ -1,6 +1,6 @@
-import { EventStageEnum } from "../enums";
+import { EEventStage } from "../enums";
 
-export type EventStageListenerDictionaryType<T = EventListener> = Record<
-  (typeof EventStageEnum)[keyof typeof EventStageEnum],
+export type TEventStageListenerDictionary<T = EventListener> = Record<
+  (typeof EEventStage)[keyof typeof EEventStage],
   (event: T) => void
 >;

@@ -1,1 +1,5 @@
-export { ResizeBoxPoint, type IResizeBoxPointHandler } from "./point";
+export {
+  ResizeBoxPoint,
+  type IResizeBoxPointHandler,
+  type IResizeBoxPointProps,
+} from "./point";
