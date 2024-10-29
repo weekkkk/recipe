@@ -7,7 +7,7 @@ describe("ResizeBox", () => {
   beforeEach(() => {
     render(
       <ResizeBox
-        pointElements={{
+        controlElements={{
           top: <button>Top Point</button>,
           right: <button>Right Point</button>,
           bottom: <button>Bottom Point</button>,

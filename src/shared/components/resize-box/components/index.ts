@@ -1,5 +1,5 @@
 export {
-  ResizeBoxPoint,
-  type IResizeBoxPointHandler,
-  type IResizeBoxPointProps,
-} from "./point";
+  ResizeBoxControl,
+  type IResizeBoxControlHandler,
+  type IResizeBoxControlProps,
+} from "./control";

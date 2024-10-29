@@ -78,7 +78,7 @@ export class DragService<T extends HTMLElement = HTMLElement> {
   };
 
   private get deltaPosition(): IPosition | undefined {
-    if (this.startPosition == undefined || this.position == undefined) return;
+    if (!this.startPosition || !this.position) return;
     const x = this.startPosition.x - this.position.x;
     const y = this.startPosition.y - this.position.y;
     return {

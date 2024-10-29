@@ -1,7 +1,7 @@
-import { IResizeBoxPointProps } from "../interfaces";
+import { IResizeBoxControlProps } from "../interfaces";
 
-export const resizeBoxPointTranslateClasses: Record<
-  IResizeBoxPointProps["side"],
+export const resizeBoxControlTranslateClasses: Record<
+  IResizeBoxControlProps["side"],
   string
 > = {
   top: "-translate-y-1/2 -translate-x-1/2",

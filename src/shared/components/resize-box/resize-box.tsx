@@ -1,22 +1,13 @@
-import {
-  FC,
-  memo,
-  useCallback,
-  // useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { FC, memo, useCallback, useMemo, useRef, useState } from "react";
 import type { IResizeBoxProps } from "./interfaces";
-import { ResizeBoxPoint, IResizeBoxPointHandler } from "./components";
+import { ResizeBoxControl, IResizeBoxControlHandler } from "./components";
 import { ISize } from "@/shared/interfaces";
 import { ESide } from "@/shared/enums";
 import { TSide } from "@/shared/types";
-// import { optimizeSetState } from "@/shared/functions";
 
 export const ResizeBox: FC<IResizeBoxProps> = memo(
-  ({ children, pointElements, position = "relative" }) => {
-    const $localChildrenChild = useRef<HTMLDivElement>(null);
+  ({ children, controlElements, position = "relative" }) => {
+    const _childrenChild = useRef<HTMLDivElement>(null);
 
     const [height, setHeight] = useState<ISize["height"]>();
     const [width, setWidth] = useState<ISize["width"]>();
@@ -24,14 +15,18 @@ export const ResizeBox: FC<IResizeBoxProps> = memo(
       const size: Partial<ISize> = {};
       if (height) size.height = height;
       if (width) size.width = width;
-      // console.log(size);
       return size;
     }, [height, width]);
 
-    // const optimizedSetSize = useMemo(() => optimizeSetState(setSize), []);
-
-    const handleDrag: IResizeBoxPointHandler = useCallback(
-      (delta, side, sizePropName) => {
+    const getStartSize = (): ISize | undefined => {
+      if (!_childrenChild.current) return;
+      const $element = _childrenChild.current.parentElement;
+      if (!$element) return;
+      const { offsetHeight: height, offsetWidth: width } = $element;
+      return { height, width };
+    };
+    const handleDrag: IResizeBoxControlHandler = useCallback(
+      ({ delta, side, sizePropName }) => {
         const startSize = handleDrag[sizePropName];
         if (!startSize) return;
         if (side == ESide.Right || side == ESide.Bottom) delta = -delta;
@@ -42,10 +37,8 @@ export const ResizeBox: FC<IResizeBoxProps> = memo(
       },
       []
     );
-
-    const handleGrab: IResizeBoxPointHandler = useCallback(
-      (delta, side, sizePropName) => {
-        // console.log(sizePropName);
+    const handleGrab: IResizeBoxControlHandler = useCallback(
+      ({ sizePropName }) => {
         if (!handleDrag[sizePropName])
           handleDrag[sizePropName] = getStartSize()?.[sizePropName];
         if (sizePropName == "height") setHeight(handleDrag[sizePropName]);
@@ -53,23 +46,18 @@ export const ResizeBox: FC<IResizeBoxProps> = memo(
       },
       [handleDrag]
     );
-
-    const handleDrop: IResizeBoxPointHandler = useCallback(
-      (delta, side, sizePropName) => {
-        handleDrag(delta, side, sizePropName);
-        handleDrag[sizePropName] = undefined;
+    const handleDrop: IResizeBoxControlHandler = useCallback(
+      (e) => {
+        handleDrag(e);
+        delete handleDrag[e.sizePropName];
       },
       [handleDrag]
     );
-
-    const points = useMemo(() => {
-      const entries = Object.entries(pointElements) as [
-        TSide,
-        JSX.Element
-      ][];
+    const controls = useMemo(() => {
+      const entries = Object.entries(controlElements) as [TSide, JSX.Element][];
       return entries.map(([side, pointElement]) => {
         return (
-          <ResizeBoxPoint
+          <ResizeBoxControl
             key={side}
             side={side}
             onGrab={handleGrab}
@@ -77,13 +65,12 @@ export const ResizeBox: FC<IResizeBoxProps> = memo(
             onDrop={handleDrop}
           >
             {pointElement}
-          </ResizeBoxPoint>
+          </ResizeBoxControl>
         );
       });
-    }, [pointElements, handleDrag, handleGrab, handleDrop]);
+    }, [controlElements, handleDrag, handleGrab, handleDrop]);
 
-    const localChildren: JSX.Element = useMemo(() => {
-      // console.log(points);
+    const _children: JSX.Element = useMemo(() => {
       return {
         ...children,
         props: {
@@ -92,28 +79,14 @@ export const ResizeBox: FC<IResizeBoxProps> = memo(
           className: `${children.props.className} ${position}`,
           children: (
             <>
-              {children.props.children} {points}
-              <div hidden ref={$localChildrenChild} />
+              {children.props.children} {controls}
+              <div hidden ref={_childrenChild} />
             </>
           ),
         },
       };
-    }, [size, children, points, position]);
+    }, [size, children, controls, position]);
 
-    // useLayoutEffect(() => {
-    //   optimizedSetSize(getStartSize());
-    // }, [optimizedSetSize]);
-
-    const getStartSize = (): ISize | undefined => {
-      if (!$localChildrenChild.current) return;
-      const parent = $localChildrenChild.current.parentElement;
-      if (!parent) return;
-      return {
-        height: parent.offsetHeight,
-        width: parent.offsetWidth,
-      };
-    };
-
-    return localChildren;
+    return _children;
   }
 );

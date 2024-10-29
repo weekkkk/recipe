@@ -1,6 +1,6 @@
 import { TOrientation } from "@/shared/types";
 
-export const resizeBoxPointCursorClasses: Record<
+export const resizeBoxControlCursorClasses: Record<
   TOrientation,
   string
 > = {

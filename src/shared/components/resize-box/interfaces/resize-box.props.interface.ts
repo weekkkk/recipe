@@ -1,11 +1,11 @@
 import { TSide } from "@/shared/types";
-import { IResizeBoxPointProps } from "../components";
+import { IResizeBoxControlProps } from "../components";
 import { TResizeBoxPosition } from "../types";
 
-type TResizeBoxPointElement = IResizeBoxPointProps["children"];
+type TResizeBoxControlElement = IResizeBoxControlProps["children"];
 
 export interface IResizeBoxProps {
   children: JSX.Element;
-  pointElements: Partial<Record<TSide, TResizeBoxPointElement>>;
+  controlElements: Partial<Record<TSide, TResizeBoxControlElement>>;
   position?: TResizeBoxPosition;
 }

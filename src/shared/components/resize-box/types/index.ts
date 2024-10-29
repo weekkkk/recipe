@@ -1,1 +1,1 @@
-export type { TResizeBoxPosition } from "./position.type";
+export type { TResizeBoxPosition } from "./resize-box.position.type";

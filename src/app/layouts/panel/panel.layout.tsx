@@ -64,7 +64,7 @@ export const PanelLayout: FC<TPanelLayoutProps> = ({
   return (
     <ResizeBox
       position={position}
-      pointElements={{
+      controlElements={{
         [pointSide]: <PanelLayoutResizePoint orientation={orientation} />,
       }}
     >
