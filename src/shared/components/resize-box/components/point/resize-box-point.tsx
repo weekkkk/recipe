@@ -3,9 +3,14 @@ import type { IResizeBoxPointProps } from "./interfaces";
 import {
   resizeBoxPointSideClasses as sideClasses,
   resizeBoxPointTranslateClasses as translateClasses,
+  resizeBoxPointCursorClasses as cursorClasses,
 } from "./classes";
 import { DragService, DragServiceEvent } from "@/shared/services";
-import { TSide, TSizePropName } from "@/shared/types";
+import { TSizePropName } from "@/shared/types";
+import {
+  getOrientationBySide,
+  getSizePropNameByOrientation,
+} from "@/shared/functions";
 
 export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
   children,
@@ -16,9 +21,11 @@ export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
 }) => {
   const $localChildrenChild = useRef<HTMLDivElement>(null);
 
+  const orientation = useMemo(() => getOrientationBySide(side), [side]);
+
   const className = `${children.props.className ?? ""} ${sideClasses[side]} ${
     translateClasses[side]
-  } absolute touch-none`;
+  } ${cursorClasses[orientation]} absolute touch-none`;
 
   const localChildren: JSX.Element = {
     ...children,
@@ -33,40 +40,36 @@ export const ResizeBoxPoint: FC<IResizeBoxPointProps> = ({
     },
   };
 
-  const xSides: TSide[] = useMemo(() => ["left", "right"], []);
-
-  const orientation = useMemo(
-    () => (xSides.includes(side) ? "x" : "y"),
-    [xSides, side]
-  );
-
   const sizePropName = useMemo<TSizePropName>(
-    () => (orientation == "x" ? "width" : "height"),
+    () => getSizePropNameByOrientation(orientation),
     [orientation]
   );
 
+  const deltaPositionOrientation: keyof DragServiceEvent["deltaPosition"] =
+    useMemo(() => (orientation === "x" ? "y" : "x"), [orientation]);
+
   const handleStart = useCallback(
     (e: DragServiceEvent) => {
-      const delta = e.deltaPosition[orientation];
+      const delta = e.deltaPosition[deltaPositionOrientation];
       onGrab?.(delta, side, sizePropName);
     },
-    [onGrab, orientation, side, sizePropName]
+    [onGrab, deltaPositionOrientation, side, sizePropName]
   );
 
   const handleDrag = useCallback(
     (e: DragServiceEvent) => {
-      const delta = e.deltaPosition[orientation];
+      const delta = e.deltaPosition[deltaPositionOrientation];
       onDrag?.(delta, side, sizePropName);
     },
-    [onDrag, orientation, side, sizePropName]
+    [onDrag, deltaPositionOrientation, side, sizePropName]
   );
 
   const handleStop = useCallback(
     (e: DragServiceEvent) => {
-      const delta = e.deltaPosition[orientation];
+      const delta = e.deltaPosition[deltaPositionOrientation];
       onDrop?.(delta, side, sizePropName);
     },
-    [onDrop, orientation, side, sizePropName]
+    [onDrop, deltaPositionOrientation, side, sizePropName]
   );
 
   useEffect(() => {

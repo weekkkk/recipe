@@ -1,22 +1,27 @@
 import { FC, useMemo } from "react";
-import { IPanelLayoutProps } from "./interfaces";
+import classNames from "classnames";
 import { ResizeBox } from "@/shared/components";
 import { PanelLayoutResizePoint } from "./components";
-import { TSide } from "@/shared/types";
-import { getOrientationBySide } from "@/shared/functions";
-import classNames from "classnames";
+import { TSide, TSizeRange } from "@/shared/types";
+import {
+  getCapitalizeString,
+  getOrientationBySide,
+  getSizePropNameByOrientation,
+} from "@/shared/functions";
 import { useTransitionState } from "@/shared/hooks";
-// import { IRange, ISize } from "@/shared/interfaces";
+import { IRange } from "@/shared/interfaces";
+import { panelLayoutInsetClasses as insetClasses } from "./classes";
+import { TPanelLayoutProps, TPanelLayoutSizeRangeProps } from "./types";
 
-export const PanelLayout: FC<IPanelLayoutProps> = ({
+export const PanelLayout: FC<TPanelLayoutProps> = ({
   side,
   height,
   width,
   children,
   position = "relative",
-  className = "",
+  className,
   visible = true,
-  ...restSize
+  ...sizeRangeProps
 }) => {
   const orientation = useMemo(() => getOrientationBySide(side), [side]);
 
@@ -33,33 +38,26 @@ export const PanelLayout: FC<IPanelLayoutProps> = ({
     }
   }, [side]);
 
-  const insetClass = useMemo(
-    () => (orientation == "x" ? "inset-x-0" : "inset-y-0"),
-    [orientation]
-  );
+  const sideClass = useMemo(() => `${side}-0`, [side]);
 
-  // const hideSize = useMemo(() => visible || 0, [visible]);
+  const hideSize = useMemo(() => visible || 0, [visible]);
+  const sizeRange: TPanelLayoutSizeRangeProps = useMemo(() => {
+    const sizePropName = getSizePropNameByOrientation(orientation);
+    const capitalizeSizePropName = getCapitalizeString(sizePropName);
+    const rangeKeys: (keyof IRange)[] = ["max", "min"];
 
-  // const size = useMemo<Partial<ISize<IRange>>>(() => {
-    
-  // }, [orientation, restSize]);
+    const _sizeRange = rangeKeys.reduce<TPanelLayoutSizeRangeProps>(
+      (calc, rK) => {
+        const obj = { ...calc };
+        const key: keyof TSizeRange = `${rK}${capitalizeSizePropName}`;
+        obj[key] = hideSize && sizeRangeProps[key];
+        return obj;
+      },
+      {}
+    );
 
-  // const maxHeight = useMemo(
-  //   () => (orientation == "x" ? hideSize && propMaxHeight : propMaxHeight),
-  //   [orientation, hideSize, propMaxHeight]
-  // );
-  // const maxWidth = useMemo(
-  //   () => (orientation == "y" ? hideSize && propMaxWidth : propMaxWidth),
-  //   [orientation, hideSize, propMaxWidth]
-  // );
-  // const minHeight = useMemo(
-  //   () => (orientation == "x" ? hideSize && propMinHeight : propMinHeight),
-  //   [orientation, hideSize, propMinHeight]
-  // );
-  // const minWidth = useMemo(
-  //   () => (orientation == "y" ? hideSize && propMinWidth : propMinWidth),
-  //   [orientation, hideSize, propMinWidth]
-  // );
+    return _sizeRange;
+  }, [hideSize, orientation, sizeRangeProps]);
 
   const [isTransition, onTransitionEnd] = useTransitionState(visible);
 
@@ -72,18 +70,19 @@ export const PanelLayout: FC<IPanelLayoutProps> = ({
     >
       <aside
         onTransitionEnd={onTransitionEnd}
-        className={`${side}-0 ${insetClass} ${className} transition-size ${classNames(
+        className={classNames(
+          "flex shrink-0 bg-default transition-size",
+          sideClass,
+          insetClasses[orientation],
+          className,
           {
             "overflow-hidden": isTransition || !visible,
           }
-        )} shrink-0 bg-default flex`}
+        )}
         style={{
-          maxWidth,
-          minWidth,
           width,
-          maxHeight,
-          minHeight,
           height,
+          ...sizeRange,
         }}
       >
         <div className="px-8 py-4 overflow-y-auto overflow-x-auto">

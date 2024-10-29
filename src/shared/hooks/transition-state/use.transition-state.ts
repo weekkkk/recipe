@@ -9,7 +9,6 @@ export const useTransitionState = <T = Element>(
 
   const onTransitionStart = () => {
     if (isTransition) return;
-    console.log("start");
     setIsTransition(true);
   };
 
@@ -26,8 +25,6 @@ export const useTransitionState = <T = Element>(
 
     if (savedPropertyName && savedPropertyName !== propertyName) return;
     Object.assign(onTransitionEnd, { propertyName });
-
-    console.log("end");
 
     setIsTransition(false);
   };
